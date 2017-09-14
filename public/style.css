@@ -1,0 +1,41 @@
+i.get-albums-btn {
+  cursor: pointer;
+  font-size: 2em;
+}
+
+i.fa.fa-pencil-square-o {
+  cursor: pointer;
+  font-size: 1em;
+}
+
+a i {
+  text-decoration: none;
+}
+
+i.fa.fa-pencil-square-o:hover {
+  color: blue;
+}
+
+.modal-content {
+  display: none;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+.modal-body label{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.modal-body input{
+  align-self: flex-end;
+  width: 80%;
+}
+
+.modal-show {
+  display: block;
+}

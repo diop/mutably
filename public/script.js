@@ -2,24 +2,58 @@ const url = 'http://mutably.herokuapp.com/albums/'
 const getAlbums = document.querySelector('.get-albums-btn')
 const listGroup = document.querySelector('.list-group')
 
+const checkStatus = response =>  {
+  if (response.status === 200) {
+    return Promise.resolve(response)
+  } else {
+    return Promise.reject(new Error(response.statusText))
+  }
+}
+
+const getJSON = response => response.json()
+
 $(document).ready(function(){
 
   // Get All Albums On Load
   getAllAlbums();
 
-  $('.get-albums-btn').click( function (event)  {
-    getAllAlbums();
+  $(document).on('click', '.save-changes-btn', CONTROLLER.updateAlbum)
+
+  $(document).on('click', '.delete-btn', CONTROLLER.deleteAlbum)
+
+  $(document).on('click', '.edit-btn', CONTROLLER.editAlbum)
+
+  $(document).on('click', '.close-btn', CONTROLLER.closeModal)
+
+  $(document).on('click', '.save-changes-btn', CONTROLLER.saveChanges)
+
+})
+
+  $(document).on('click', '.edit-btn', function()  {
+    let id = $(this.parentElement).data("id")
+    let artist = $(this.parentElement).data("artist")
+    let name = $(this.parentElement).data("name")
+    let releaseDate = $(this.parentElement).data("release")
+    let version = $(this.parentElement).data("version")
+    let genres = $(this.parentElement).data("genres")
+
+    $(".modal-title").html(`<h2>${id}</h2>`)
+    $("input[name=artist]").val(artist)
+    $("input[name=name]").val(name)
+    $("input[name=date]").val(releaseDate)
+    $("input[name=version]").val(version)
+    $("input[name=genre]").val(genres)
+
+    ELEMENTS.modalContent.addClass( 'modal-show');
   })
 
+  // Global Variables
   var ELEMENTS = {
     modalContent: function () { return $('.modal-content')},
     editButtons: function() { return $('.edit-btn')},
-    albumEditForm: function() { return $('.')}
+    albumEditForm: function() { return $('.album-edit-form')}
   }
 
-  function extractAlbumFromEditForm() {
-
-  }
 
   var CONTROLLER = {
     updateAlbum: function(event) {
@@ -43,76 +77,36 @@ $(document).ready(function(){
   }
 
   var DATA = {
-    fetchAlbums: function() {},
+    fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      headers: new Headers({
+      'Content-Type': 'application/json'
+      })
+    })
+    .then(checkStatus)
+    .then(getJSON)
     updateAlbum: function(album) {
       return fetch('/albums', {method: 'PUT', body: JSON.stringify(album)})
       .then()
     }
   }
 
-/*
-  0. add a click handler to the update button
-  1. Extract data from the form
-  2. Pass the data to my DATA function, and make an API call to update the data
-  3. On success, update the UI
-*/
+  /*
+    0. add a click handler to the update button
+    1. Extract data from the form
+    2. Pass the data to my DATA function, and make an API call to update the data
+    3. On success, update the UI
+  */
 
-$(document).on('click', '.save-changes-btn', CONTROLLER.updateAlbum)
-
-
-  $(document).on('click', '.edit-btn', function()  {
-    let id = $(this.parentElement).data("id")
-    let artist = $(this.parentElement).data("artist")
-    let name = $(this.parentElement).data("name")
-    let releaseDate = $(this.parentElement).data("release")
-    let version = $(this.parentElement).data("version")
-    let genres = $(this.parentElement).data("genres")
-
-    $(".modal-title").html(`<h2>${id}</h2>`)
-    $("input[name=artist]").val(artist)
-    $("input[name=name]").val(name)
-    $("input[name=date]").val(releaseDate)
-    $("input[name=version]").val(version)
-    $("input[name=genre]").val(genres)
-
-    ELEMENTS.modalContent.addClass( 'modal-show');
-  })
-
-  $(document).on('click', '.close-btn', function() {
-  })
-
-  $(document).on('click', '.save-changes-btn', function() {
-    let id = $(this).data("id")
-    updateAlbum(id);
-    $('.modal-content').removeClass('modal-show');
-    getAllAlbums();
-  })
-
-  $(document).on('click', '.delete-btn', function() {
-    alert("Pressed Delete Button")
-  })
 });
 
-const checkStatus = response =>  {
-  if (response.status === 200) {
-    return Promise.resolve(response)
-  } else {
-    return Promise.reject(new Error(response.statusText))
-  }
+const extractAlbumFromEditForm = () => {
+
 }
 
-const getJSON = response => response.json()
-
 const getAllAlbums = () => {
-  fetch(url, {
-    method: 'GET',
-    mode: 'cors',
-    headers: new Headers({
-		'Content-Type': 'application/json'
-    })
-  })
-  .then(checkStatus)
-  .then(getJSON)
+
   .then( albums => {
     albums = albums.albums
     albums.forEach( album => {

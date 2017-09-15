@@ -2,16 +2,6 @@ const url = 'http://mutably.herokuapp.com/albums/'
 const getAlbums = document.querySelector('.get-albums-btn')
 const listGroup = document.querySelector('.list-group')
 
-const checkStatus = response =>  {
-  if (response.status === 200) {
-    return Promise.resolve(response)
-  } else {
-    return Promise.reject(new Error(response.statusText))
-  }
-}
-
-const getJSON = response => response.json()
-
 $(document).ready(function(){
 
   // Get All Albums On Load
@@ -47,12 +37,7 @@ $(document).ready(function(){
     ELEMENTS.modalContent.addClass( 'modal-show');
   })
 
-  // Global Variables
-  var ELEMENTS = {
-    modalContent: function () { return $('.modal-content')},
-    editButtons: function() { return $('.edit-btn')},
-    albumEditForm: function() { return $('.album-edit-form')}
-  }
+  // Global Objects
 
 
   var CONTROLLER = {
@@ -77,19 +62,7 @@ $(document).ready(function(){
   }
 
   var DATA = {
-    fetch(url, {
-      method: 'GET',
-      mode: 'cors',
-      headers: new Headers({
-      'Content-Type': 'application/json'
-      })
-    })
-    .then(checkStatus)
-    .then(getJSON)
-    updateAlbum: function(album) {
-      return fetch('/albums', {method: 'PUT', body: JSON.stringify(album)})
-      .then()
-    }
+
   }
 
   /*
@@ -109,23 +82,7 @@ const getAllAlbums = () => {
 
   .then( albums => {
     albums = albums.albums
-    albums.forEach( album => {
-      $(".list-group")
-        .append(`
-        <li class="list-group-item"
-          data-id="${album._id}"
-          data-artist="${album.artistName}"
-          data-name="${album.name}"
-          data-release="${album.releaseDate}"
-          data-version="${album.__v}"
-          data-genres="${album.genres}"
-        >
-        ${JSON.stringify(album.name)}
-         <i class="fa fa-trash-o" aria-hidden="true"></i>
-         <a class="edit-btn" data-toggle="modal" data-target="#musicModal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-        </li>
-         `);
-    })
+
   })
   .catch(err => console.log(err) )
 }
@@ -150,21 +107,5 @@ const updateAlbum = (id) => {
 
   console.log('url + albumId ----> ', url + id)
 
-  fetch(url + id, {
-    method: 'PUT',
-    mode: 'cors',
-    headers: new Headers({
-      'Accept': 'application/json',
-  		'Content-Type': 'application/json'
-    }),
-    body: JSON.stringify({
-      _id: albumId,
-      artistName: artist,
-      name: name,
-      releaseDate: releaseDate,
-      __v: version,
-      genres: genres
-    })
-  }).then(checkStatus)
-    .catch(err => console.log(err) )
+
 }

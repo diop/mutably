@@ -53,6 +53,12 @@ var DATA = {
 }
 
 var CONTROLLER = {
+  /*
+    0. add a click handler to the update button
+    1. Extract data from the form
+    2. Pass the data to my DATA function, and make an API call to update the data
+    3. On success, update the UI
+  */
   updateAlbum: function(event) {
     var updatedAlbum = extractAlbumFromEditForm()
     DATA.updateAlbum(updatedAlbum)
@@ -60,7 +66,11 @@ var CONTROLLER = {
       UI.updateAlbum()
     })
   },
-  addAlbum: function() {},
+  /*
+    1.
+    2.
+    3.
+  */
   deleteAlbum: function() {}
 }
 

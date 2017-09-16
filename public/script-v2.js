@@ -19,7 +19,7 @@ var ELEMENTS = {
 
 var DATA = {
   fetchAlbums: function(){
-    fetch(url + resource, {
+    return fetch(url + resource, {
       method: 'GET',
       mode: 'cors',
       headers: new Headers({
@@ -32,7 +32,7 @@ var DATA = {
   },
 
   updateAlbum: function(){
-    fetch(url + id, {
+    return fetch(url + id, {
       method: 'PUT',
       mode: 'cors',
       headers: new Headers({
